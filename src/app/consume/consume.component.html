@@ -1,0 +1,160 @@
+<div class="container-fluid">
+    <div class="content-wrap">
+        <div class="logo d-flex">
+            <img src="assets/imgs/logo.png" alt="Logo">
+        </div>
+        <div class="status-bar d-flex justify-content-between flex-column flex-sm-row mt-5">
+            <div class="transmitterStatus">
+                <span class="statusIcon me-3"></span>
+                <span>
+                    <b>
+                        All transmitters are <span class="effectText"> operational</span>
+                    </b>
+                </span>
+            </div>
+            <div class="priceStatus mt-3 mt-sm-0">
+                <span>Last price update</span>
+                <span class="updateTime ms-3"><b> {{last_price_update_time}}</b></span>
+            </div>
+        </div>
+        <div class="taurus-label">
+            <span><b>Transmitters</b></span>
+            <span class="time-history ms-3">Last 24hours</span>
+        </div>
+        <div class="taurus p-3 mt-3" *ngFor="let deviceArray of deviceArrays; index as i">
+            <div class="d-flex justify-content-between flex-column flex-sm-row">
+                <div class="d-flex">
+                    <div class="taurs-logo">T</div>
+                    <div class="ms-2">{{deviceArray.name}}</div>
+                </div>
+                <div class="d-flex mt-3 mt-sm-0">
+                    <div class="statusIconsm my-auto"></div>
+                    <div class="my-auto ms-2">operational</div>
+                </div>
+            </div>
+            <div class="taurus-selector mt-2 mb-2">
+                <span class="taurus-frag" *ngFor="let tick of ticks[i]; index as i" [ngClass]="tick ? 'frag-active1' : 'frag-active2'"></span>
+            </div>
+            <div class="d-flex justify-content-between flex-column flex-sm-row">
+                <div class="d-flex taurus-collaps">
+                    <div>Last Attestation</div>
+                    <div class="taurus-time ms-2">
+                        {{calcTime[i]}}
+                    </div>
+                    <div class="ms-2 text-body cursor-pointer" data-bs-toggle="collapse" [attr.href]="'#taurus-collaps'+i" (click)="changeActive()">
+                        <span class="iconify" data-icon="entypo:chevron-down" data-inline="false"></span>
+                    </div>
+                </div>
+                <div class="d-flex taurus-price">
+                    <div>Last Price</div>
+                    <div class="text-body fw-bold ms-2">{{lastPrice[i]}}</div>
+                </div>
+            </div>
+            <div class="collapse" [id]="'taurus-collaps'+i">
+                <hr>
+                <div class="attensation d-flex justify-content-between flex-column flex-sm-row">
+                    <div class="attensation-left d-flex">
+                        <div>
+                            Attensation
+                        </div>
+                        <div>
+                            <span class="iconify" data-icon="cil:copy" data-inline="false"></span>
+                        </div>
+                    </div>
+                    <div class="attesation-right">
+                        <textarea name="attesation-text" id="attensation" rows="4" readonly>{{deviceArray.last_attestation}}</textarea>
+                    </div>
+                </div>
+                <div class="certificates d-flex justify-content-between mt-3 flex-column flex-sm-row">
+                    <div class="certificates-left d-flex">
+                        <div>
+                            certificates
+                        </div>
+                        <div>
+                            <span class="iconify" data-icon="cil:copy" data-inline="false"></span>
+                        </div>
+                    </div>
+                    <div class="certificates-right">
+                        <textarea name="certificates-text" id="certificates" rows="4" readonly>{{deviceArray.certificate_chain}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="price-feed-label mt-5">
+            <h5>Price Feed</h5>
+        </div>
+        <div class="price-feed-wrap mt-4 pb-5">
+            <div class="accordion accordion-flush" id="accordionPricefeed">
+                <div class="accordion-item my-4 border-0" *ngFor="let price_feed of price_feeds; index as i">
+                  <div class="accordion-header d-flex justify-content-between" [id]="'flush-heading'+i">
+                    <div class="collapsed d-flex" data-bs-toggle="collapse" [attr.data-bs-target]="'#flush-collapse'+i" aria-expanded="false" [attr.aria-controls]="'flush-collapse'+i" (click)="changeActive()">
+                        <div>
+                            <img src="assets/imgs/priceicon.png" alt="priceicon">
+                        </div>
+                        <div class="ms-3 font-1 my-auto me-3">
+                            {{price_feed.timestamp}}
+                        </div>
+                        <div class="ms-5 font-1 my-auto">
+                            <b>
+                                {{price_feed.price/1000000}} USD
+                            </b>
+                        </div>
+                        <div class="ms-5 font-1 my-auto me-5">
+                            <b>
+                                {{price_feed.symbol}}
+                            </b>
+                        </div>
+                        <div class="ms-5 font-1 my-auto">
+                            <span class="fw-bolder">{{deviceName[i]}}</span>
+                            <span class="font-2 my-auto ms-1">p2pk68.6iL68r</span>
+                        </div>
+                    </div>
+                    <div class="collapsed" data-bs-toggle="collapse" [attr.data-bs-target]="'#flush-collapse'+i" aria-expanded="false" [attr.aria-controls]="'flush-collapse'+i" (click)="changeActive()">
+                        <span class="iconify" data-icon="entypo:chevron-down" data-inline="false"></span>
+                    </div>
+                  </div>
+                  <div [id]="'flush-collapse'+i" class="accordion-collapse collapse" [attr.aria-labelledby]="'flush-heading'+i" data-bs-parent="#accordionPricefeed">
+                    <div class="accordion-body p-0">
+                        <hr>
+                        <div class="row flex-column flex-sm-row">
+                            <div class="col-4">
+                                Exchange ID
+                            </div>
+                            <div class="col-8">
+                                {{price_feed.exchange_id}}
+                            </div>
+                        </div>
+                        <div class="row flex-column flex-sm-row">
+                            <div class="col-4">
+                                Volumn
+                            </div>
+                            <div class="col-8">
+                                {{price_feed.volume/1000000}} tez
+                            </div>
+                        </div>
+                        <div class="row flex-column flex-sm-row">
+                            <div class="col-4">
+                                Packed Payload
+                            </div>
+                            <div class="col-8">
+                                <textarea rows="2" readonly class="long-data">{{price_feed.hex_packed_payload}}</textarea>
+                            </div>
+                        </div>
+                        <div class="row flex-column flex-sm-row">
+                            <div class="col-4">
+                                Signature
+                            </div>
+                            <div class="col-8">
+                                <textarea rows="2" readonly class="long-data">{{price_feed.signature}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
